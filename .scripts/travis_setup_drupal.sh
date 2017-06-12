@@ -8,11 +8,13 @@ $SCRIPT_DIR/travis_setup_php.sh
 echo "Install utilities needed for testing"
 mkdir /opt/utils
 cd /opt/utils
-composer require squizlabs/php_codesniffer ^2.9
+composer require squizlabs/php_codesniffer:^2.9
 composer require drupal/coder
 composer require sebastian/phpcpd
+composer require drush/drush:~8.0
 sudo ln -s /opt/utils/vendor/bin/phpcs /usr/bin/phpcs
 sudo ln -s /opt/utils/vendor/bin/phpcpd /usr/bin/phpcpd
+sudo ln -s /opt/utils/vendor/bin/drush /usr/bin/drush
 phpenv rehash
 phpcs --config-set installed_paths /opt/utils/vendor/drupal/coder/coder_sniffer
 
@@ -27,14 +29,11 @@ if [[ $RELEASE = development ]]; then
   # Should probably be reevaluated for 8.5 when doing the update.
   # https://github.com/drupal-composer/drupal-project/pull/270
   composer --verbose remove --no-update drupal/console 
-  composer --verbose require --no-update drupal/core:8.4.x-dev drush/drush:9.0.x-dev 
+  composer --verbose remove --no-update drush/drush
+  composer --verbose require --no-update drupal/core:8.4.x-dev
 fi
 
 composer install
-
-echo "Setup Drush"
-sudo ln -s /opt/drupal/vendor/bin/drush /usr/bin/drush
-phpenv rehash
 
 echo "Drush setup drupal site"
 cd web
