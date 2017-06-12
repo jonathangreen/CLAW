@@ -23,13 +23,11 @@ cd drupal
 
 if [[ $RELEASE = development ]]; then 
   # the drupal 8.4.x branch has some dependancy conflicts with
-  # console and composer, so we just don't install them if we 
-  # are working on the development branch. 
-  # Should probably be reevaluated for 8.5 when doing the update
+  # console and drush. 
+  # Should probably be reevaluated for 8.5 when doing the update.
   # https://github.com/drupal-composer/drupal-project/pull/270
   composer --verbose remove --no-update drupal/console 
-  composer --verbose remove --no-update drush/drush
-  composer --verbose require --no-update drupal/core:8.4.x-dev 
+  composer --verbose require --no-update drupal/core:8.4.x-dev drush/drush:9.0.x-dev 
 fi
 
 composer install
